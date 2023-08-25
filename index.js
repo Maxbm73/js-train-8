@@ -38,6 +38,9 @@ console.log(getUsersFromDatabase(userRecords));
  * Повертає Видалений останній елемент або `undefined`, якщо масив порожній.
  */
 function removeLastElement(arr) {
+  if (arr.length === 0) {
+    return undefined;
+  }
   arr.pop();
   return arr;
   // Перевіряємо, чи масив не є порожнім, якщо порожній повертаємо  undefined
@@ -78,6 +81,10 @@ console.log(filterByCondition([1, 2, 3, 4, 5], condition)); // Виведе [2, 
  *Повертає: `true`, якщо об'єкт є масивом, `false` - у протилежному випадку.
  */
 function checkArray(obj) {
+  if (obj == null || obj == undefined) {
+    console.log(`Вхідний об'єкт є null або undefined.`);
+    return false;
+  }
   return Array.isArray(obj);
   // Перевіряємо, чи є об'єкт не null і не undefined
   // Використовуємо метод `Array.isArray` для перевірки, чи є об'єкт масивом
@@ -98,7 +105,12 @@ console.log(checkArray([1, 2, 3, 4, 5])); // Виведе true
  * Повертає: Новий масив з переданих елементів.
  */
 function createArray(...elements) {
-  return Array.of(...elements);
+  if (elements.length > 0) {
+    return Array.of(...elements);
+  } else {
+    console.log("Помилка");
+    return [];
+  }
   // Перевіряємо, чи кількість переданих елементів більше нуля
   // Використовуємо метод `Array.of` для створення нового масиву з переданих елементів
   // Повертаємо створений масив
@@ -119,6 +131,13 @@ console.log(createArray(1, 2, 3, 4, 5)); // Виведе [1, 2, 3, 4, 5]
  * Повертає Елемент з масиву за заданим індексом або `undefined`, якщо індекс виходить за межі масиву.
  */
 function getElementAtIndex(arr, index) {
+  if (arr.length == 0) {
+    return undefined;
+  }
+  if (index > arr.length - 1) {
+    return undefined;
+  }
+
   return arr.at(index);
   // Перевіряємо, чи масив не є порожнім
   // Повертаємо undefined
@@ -142,8 +161,8 @@ console.log(getElementAtIndex([1, 2, 3, 4, 5], 2)); // Виведе 3
  * Повертає: Об'єднаний та обернутий масив.
  */
 function combineAndReverseArrays(arr1, arr2) {
-  if (Array.isArray(arr1) === true) {
-    if (Array.isArray(arr2) === true) {
+  if (Array.isArray(arr1)) {
+    if (Array.isArray(arr2)) {
       return arr1.concat(arr2).reverse();
     }
   } else {
@@ -171,9 +190,15 @@ console.log(combineAndReverseArrays([1, 2, 3], [4, 5, 6])); //Виведе [ 6, 
  */
 function findElementIndexes(arr, element) {
   let arr1 = [];
+  let element1 = arr.indexOf(element);
+  let element2 = arr.lastIndexOf(element);
   if (Array.isArray(arr)) {
-    arr1.push(arr.indexOf(element));
-    arr1.push(arr.lastIndexOf(element));
+    if (element1 != null || element1 != undefined) {
+      arr1.push(arr.indexOf(element));
+    }
+    if (element1 != element2) {
+      arr1.push(arr.lastIndexOf(element));
+    }
     return arr1;
   } else return [];
   // Перевіряємо, чи аргумент є масивом
@@ -202,6 +227,10 @@ console.log(findElementIndexes([1, 2, 3, 4, 5, 2], 2)); //Виведе [ 1, 5 ]
  * Повертає: Модифікований масив з копійованими та переставленими елементами.
  */
 function copyAndSwapElements(arr, target, start, end) {
+  if (end < target || end < start) {
+    return `Неприпустимі індекси`;
+  }
+  console.log(target);
   return arr.copyWithin(target, start, end);
   // Перевіряємо, чи індекси належать межам масиву якщо ні виводимо рядок Неприпустимі індекси
   // Копіюємо та переставляємо елементи за допомогою методу `copyWithin`
@@ -333,8 +362,9 @@ function customShift(arr) {
     return undefined;
   }
 
-  let arr1 = arr.shift();
-  return arr;
+  let shiftedElement = arr.shift();
+  return { shiftedElement: shiftedElement, arr: arr };
+  //   return arr;
   // перевірка на масив,якщо ні повертаємо undefined
   // перевірка чи масив не пустий,якщо так повертаємо undefined
   // видаляємо перший елемент та записуємо його в змінну shiftedElement
